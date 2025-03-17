@@ -28,7 +28,7 @@
 </head>
 <body>
     <h1>Chào mừng đến với Hệ thống Đăng ký Học phần</h1>
-    <p>Chọn một chức năng bên dưới:</p>
+    <p>Hãy xem những chức năng bên dưới</p>
 
     <a href="views/index.php" class="btn">Danh sách Sinh viên</a>
     <a href="login.php" class="btn">Đăng nhập</a>

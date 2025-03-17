@@ -9,7 +9,6 @@ if (!isset($_SESSION['MaSV'])) {
 
 $MaSV = $_SESSION['MaSV'];
 
-// Truy vấn danh sách học phần đã đăng ký
 $sql = "SELECT HocPhan.MaHP, HocPhan.TenHP, HocPhan.SoTinChi, ChiTietDangKy.MaDK 
         FROM ChiTietDangKy 
         JOIN DangKy ON ChiTietDangKy.MaDK = DangKy.MaDK 

@@ -1,7 +1,6 @@
 <?php
 include '../config/database.php';
 
-// Lấy danh sách học phần
 $sql = "SELECT * FROM HocPhan";
 $result = $conn->query($sql);
 ?>
