@@ -44,9 +44,9 @@ $result = $conn->query($sql);
             color: white;
         }
         img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
+            width: 150px; 
+            height: 150px; 
+            object-fit: cover; 
             border-radius: 5px;
             border: 1px solid #ddd;
         }
@@ -67,6 +67,9 @@ $result = $conn->query($sql);
         .btn-red:hover { background: #c82333; }
         .btn-container {
             margin-bottom: 10px;
+        }
+        .text-muted {
+            color: #6c757d;
         }
     </style>
 </head>
@@ -89,24 +92,31 @@ $result = $conn->query($sql);
             </tr>
             <?php while ($row = $result->fetch_assoc()) { ?>
             <tr>
-                <td><?= $row['MaSV'] ?></td>
-                <td><?= $row['HoTen'] ?></td>
-                <td><?= $row['GioiTinh'] ?></td>
-                <td><?= $row['NgaySinh'] ?></td>
+                <td><?= htmlspecialchars($row['MaSV']) ?></td>
+                <td><?= htmlspecialchars($row['HoTen']) ?></td>
+                <td><?= htmlspecialchars($row['GioiTinh']) ?></td>
+                <td><?= htmlspecialchars($row['NgaySinh']) ?></td>
                 <td>
-    <?php
-    if (!empty($row['Hinh']) && file_exists("upload/" . $row['Hinh'])) {
-        echo '<img src="upload/' . htmlspecialchars($row['Hinh']) . '" alt="Hình sinh viên" width="50">';
-    } else {
-        echo '<img src="upload/no-image.png" alt="Không có ảnh" width="50">';
-    }
-    ?>
-</td>
-
+                    <?php
+                    $server_path = __DIR__ . "/../upload/images/" . htmlspecialchars($row['Hinh']);
+                    $image_path = "../upload/images/" . htmlspecialchars($row['Hinh']);
+                    if (!empty($row['Hinh']) && file_exists($server_path)) {
+                        ?>
+                        <img src="<?php echo htmlspecialchars($image_path, ENT_QUOTES, 'UTF-8'); ?>" 
+                             alt="<?php echo htmlspecialchars($row['HoTen'], ENT_QUOTES, 'UTF-8'); ?>" 
+                             class="img-thumbnail" width="150">
+                        <?php
+                    } else {
+                        ?>
+                        <p class="text-muted">Không có ảnh</p>
+                        <?php
+                    }
+                    ?>
+                </td>
                 <td>
-                    <a href="detail.php?MaSV=<?= $row['MaSV'] ?>" class="btn btn-green">Xem</a>
-                    <a href="edit.php?MaSV=<?= $row['MaSV'] ?>" class="btn btn-yellow">Sửa</a>
-                    <a href="delete.php?MaSV=<?= $row['MaSV'] ?>" class="btn btn-red" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                    <a href="detail.php?MaSV=<?= urlencode($row['MaSV']) ?>" class="btn btn-green">Xem</a>
+                    <a href="edit.php?MaSV=<?= urlencode($row['MaSV']) ?>" class="btn btn-yellow">Sửa</a>
+                    <a href="delete.php?MaSV=<?= urlencode($row['MaSV']) ?>" class="btn btn-red" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
                 </td>
             </tr>
             <?php } ?>

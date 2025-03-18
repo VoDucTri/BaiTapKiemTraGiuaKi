@@ -12,31 +12,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $check_result = $conn->query($check_sql);
 
     if ($check_result->num_rows > 0) {
-        echo "<p class='error'> Mã sinh viên đã tồn tại! Vui lòng nhập mã khác.</p>";
+        echo "<p class='error'>Mã sinh viên đã tồn tại! Vui lòng nhập mã khác.</p>";
         exit();
     }
 
-    $upload_dir = "../upload/";
+    $upload_dir = "../upload/images/";
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
+    }
 
+    $Hinh = "no-image.png"; 
     if (!empty($_FILES["Hinh"]["name"])) {
-        $file_name = basename($_FILES["Hinh"]["name"]);
+        $file_name = uniqid() . "_" . basename($_FILES["Hinh"]["name"]); 
         $target_file = $upload_dir . $file_name;
-
         $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $allowed_types = array("jpg", "jpeg", "png", "gif");
 
         if (in_array($file_type, $allowed_types)) {
             if (move_uploaded_file($_FILES["Hinh"]["tmp_name"], $target_file)) {
-                $Hinh = $file_name;
+                $Hinh = $file_name; 
             } else {
-                $Hinh = "no-image.png";
+                echo "<p class='error'>Lỗi khi upload ảnh.</p>";
+                exit();
             }
         } else {
             echo "<p class='error'>Chỉ cho phép file JPG, JPEG, PNG, GIF.</p>";
             exit();
         }
-    } else {
-        $Hinh = "no-image.png";
     }
 
     $sql = "INSERT INTO SinhVien (MaSV, HoTen, GioiTinh, NgaySinh, Hinh, MaNganh) 
@@ -123,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="container">
         <h2>Thêm Sinh Viên</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="MaSV">Mã SV:</label>
                 <input type="text" id="MaSV" name="MaSV" placeholder="Nhập Mã SV" required>
@@ -140,8 +142,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="NgaySinh">Ngày Sinh:</label>
                 <input type="date" id="NgaySinh" name="NgaySinh" required>
             </div>
-            <label>Ảnh Đại Diện:</label>
-            <input type="file" name="Hinh" accept="image/*"><br>
+            <div class="form-group">
+                <label for="Hinh">Ảnh Đại Diện:</label>
+                <input type="file" id="Hinh" name="Hinh" accept="image/*">
+            </div>
             <div class="form-group">
                 <label for="MaNganh">Mã Ngành:</label>
                 <input type="text" id="MaNganh" name="MaNganh" placeholder="Nhập Mã Ngành" required>

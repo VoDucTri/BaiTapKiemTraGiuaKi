@@ -48,6 +48,9 @@ if (isset($_GET['MaSV'])) {
         .btn:hover {
             background: #0056b3;
         }
+        .text-muted {
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -57,7 +60,17 @@ if (isset($_GET['MaSV'])) {
         <p><strong>Họ Tên:</strong> <?= htmlspecialchars($row['HoTen']) ?></p>
         <p><strong>Giới Tính:</strong> <?= htmlspecialchars($row['GioiTinh']) ?></p>
         <p><strong>Ngày Sinh:</strong> <?= htmlspecialchars($row['NgaySinh']) ?></p>
-        <p><img src="<?= "upload/" . $row['Hinh'] ?>" alt="Ảnh sinh viên"></p>
+        <p>
+            <?php
+            $image_path = "../upload/images/" . htmlspecialchars($row['Hinh']);
+            $server_path = __DIR__ . "/../upload/images/" . htmlspecialchars($row['Hinh']);
+            if (!empty($row['Hinh']) && file_exists($server_path)) {
+                echo '<img src="' . htmlspecialchars($image_path, ENT_QUOTES, 'UTF-8') . '" alt="Ảnh sinh viên">';
+            } else {
+                echo '<p class="text-muted">Không có ảnh</p>';
+            }
+            ?>
+        </p>
         <a href="index.php" class="btn">Quay lại danh sách</a>
     </div>
 </body>
